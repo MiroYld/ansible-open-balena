@@ -1,0 +1,57 @@
+- name: create group balena
+  ansible.builtin.user:
+    name: "{{ balena_group_name }}"
+    state: present
+
+- name: create user balena
+  ansible.builtin.user:
+    name: "{{ balena_username }}"
+    password: "{{ balena_user_passwd }}"
+    groups: sudo,balena,docker
+    append: yes
+
+- name: clone open balena
+  become_user: balena
+  become: true
+  ansible.builtin.git:
+    repo: "{{ ob_repository }}"
+    dest: "{{ ob_installation_folder }}"
+    clone: true
+
+- name: curl request to test if open balena is already installed
+  ansible.builtin.uri:
+    url: "{{ ob_curl_request }}"
+    method: GET
+    validate_certs: no
+  register: test_curl_ob
+  ignore_errors: yes
+
+- name: Check if the open balena config folder already exist
+  block:
+    - name: check the directory
+      ansible.builtin.stat:
+        path: "{{ ob_config_path }}"
+      register: ob_config_stat
+      when: test_curl_ob.status != -1
+
+    - name: display directory existence
+      ansible.builtin.debug:
+        msg: "Openbalena config folder in {{ ob_config_path }} {{ 'already exists' if ob_config_stat.stat.exists else 'does not exist' }}"
+      when: ob_config_stat.stat.exists is defined
+  when: test_curl_ob.status != -1
+
+- name: Open balena configuration if necessary
+  block:
+    - name: launch open balena quickstart script to create config folder
+      become: true
+      ansible.builtin.command: "{{ ob_quickstart_params }}"
+
+    - name: start docker engine
+      ansible.builtin.service:
+        name: docker
+        state: started
+
+    - name: launch open balena
+      ansible.builtin.command: "{{ ob_script_compose }}"
+
+  when: test_curl_ob.status != 200 or ob_config_stat.stat.exists == false

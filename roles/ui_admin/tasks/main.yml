@@ -1,0 +1,16 @@
+---
+- name: clone open balena admin ui
+  become: true
+  ansible.builtin.git:
+    repo: "{{ ob_admin_ui_repository }}"
+    dest: "{{ ob_admin_ui_installation_folder }}"
+    clone: true
+
+  # To start admin ui dashboard, we need to extract some secrets and api version from installed open balena instance
+  # for more details : -> https://github.com/dcaputo-harmoni/open-balena-admin?tab=readme-ov-file#installation-docker-compose
+- name: prepare admin dashboard configuration
+  ansible.builtin.script: "{{ script_start_admin_ui }} {{ ob_secrets_path }} {{ ob_api_compose_path }} {{ ob_admin_ui_quickstart_script }} {{ ob_domain_name }}"
+
+- name: start admin dashboard
+  ansible.builtin.command: "{{ ob_admin_ui_compose_script }}"
+...

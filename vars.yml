@@ -1,0 +1,31 @@
+---
+#ALIAS IN VARIABLES: ob = open balena
+ansible_python_interpreter: "/usr/bin/python3"
+
+node_js_version: "20"  # /!\ NODEJS 20 IS NEEDED REQUIRE FOR BALENA CLI /!\
+node_repository: "deb https://deb.nodesource.com/node_{{ node_js_version }}.x {{ ansible_distribution_release }} main"
+node_gpg_repository: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+
+balena_group_name: "balena"
+balena_username: "balena_username"
+balena_user_passwd: "balena_password"
+
+ob_repository: "https://github.com/balena-io/open-balena.git" # open balena github repository
+ob_installation_folder: "/home/balena/server"
+ob_script_path: "{{ ob_installation_folder }}/scripts/quickstart" # Main script to install open balena
+ob_admin_email: "your-admin-email"
+ob_password: "your-admin-passwd"
+ob_domain_name: "your-domain-name"
+ob_quickstart_params: "{{ ob_script_path }} -U {{ ob_admin_email }} -P {{ ob_password }} -d {{ ob_domain_name }}"
+ob_script_compose: "{{ ob_installation_folder }}/scripts/compose up -d"
+ob_curl_request: "https://api.{{ ob_domain_name }}/ping" # URL to test open balena configuration --> curl -k ...
+ob_config_path: "{{ ob_installation_folder }}/config"
+ob_secrets_path: "{{ ob_config_path }}/activate" # Path containing some secrets, require for open balena admin dashboard installation
+ob_api_compose_path: "{{ ob_installation_folder }}/compose/versions"
+
+ob_admin_ui_repository: "https://github.com/dcaputo-harmoni/open-balena-admin.git"
+ob_admin_ui_installation_folder: "/home/balena/admin"
+ob_admin_ui_quickstart_script: "{{ ob_admin_ui_installation_folder }}/scripts/quickstart"
+ob_admin_ui_compose_script: "{{ ob_admin_ui_installation_folder }}/scripts/compose up -d"
+script_start_admin_ui: "./roles/ui_admin/scripts/start_admin_ui.sh" # local script to start ob admin dashboard
+...

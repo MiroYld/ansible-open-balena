@@ -1,0 +1,13 @@
+Requirements for open balena:
+	     - balena cli
+	     - docker >= 18.05
+	     - docker compose >=1.11
+	     - openssl >= 1.0.0
+	     - python >= 3.0
+Notes:
+             - open balena is single user
+	     - admin dashboard: https://github.com/dcaputo-harmoni/open-balena-admin
+
+Local machine: balena-cli: 16.7.6
+      	       url: https://github.com/balena-io/balena-cli/releases/download/v16.7.6/balena-cli-v16.7.6-linux-x64-standalone.zip
+	       thread: https://forums.balena.io/t/login-not-working-with-balena-cli/369153/8

@@ -1,0 +1,44 @@
+---
+- name: update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    
+- name: utils installation
+  ansible.builtin.apt:
+    name:
+      - docker
+      - acl
+      - docker-compose
+      - python3
+      - python3-pexpect
+      - libssl-dev
+      - openssl
+      - build-essential
+      - expect
+      - curl
+    state: present
+    
+- name: gpg key for nodejs LTS installation
+  ansible.builtin.apt_key:
+    url: "{{ node_gpg_repository }}" 
+    state: present
+    
+- name: nodejs LTS repos installation
+  ansible.builtin.apt_repository:
+    repo: "{{ node_repository }}"
+    state: present
+    update_cache: yes
+
+- name: nodejs installation
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+
+- name: balena-cli installation over npm
+  community.general.npm:
+    name: balena-cli
+    global: true
+    production: true
+    unsafe_perm: true
+...

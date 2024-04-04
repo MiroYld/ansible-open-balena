@@ -1,0 +1,11 @@
+---
+- name: open balena installation
+  hosts: target
+  become: true
+  vars_files:
+    - vars.yml
+  roles:
+    - test
+    - utils
+    - open_balena
+    - ui_admin

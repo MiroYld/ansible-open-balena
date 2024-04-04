@@ -1,0 +1,5 @@
+links:
+
+- instructions: https://open-balena.pages.dev/getting-started/#preparing-a-server-for-openbalena
+- github open balena: https://github.com/balena-io/open-balena.git
+- github open balena admin dashboard: https://github.com/dcaputo-harmoni/open-balena-admin

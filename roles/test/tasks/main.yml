@@ -1,0 +1,6 @@
+- name: ping host
+  ansible.builtin.ping:
+
+- name: print msg
+  ansible.builtin.debug:
+    msg: "playbook is running to install open balena"
